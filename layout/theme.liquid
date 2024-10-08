@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    {{ content_for_header }}
+    {{ 'style.css' | asset_url | stylesheet_tag }}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <style>
+      {{ settings.body_font | font_face }}
+      {{ settings.heading_font | font_face }}
+
+      :root{
+      --bodyFont: {{ settings.body_font.family }};
+      --bodyFontWeight: {{ settings.body_font.weight }};
+      --bodyFontStyle: {{ settings.body_font.style }};
+      --headingFont: {{ settings.heading_font.family }};
+      --headingFontWeight: {{ settings.heading_font.weight }};
+      --headingFontStyle: {{ settings.heading_font.style }};
+      --fontBodyScale: {{ settings.body_scale | divided_by: 100.0 }};
+      --fontHeadingScale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+
+        --page-width: {{ settings.page_width | divided_by: 10 }}rem;
+        --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Redirect Every other url to one single url which is home page
+      {% unless template == 'index' %}
+        window.location.href = "{{ routes.root_url }}";
+      {% endunless %}
+    </script>
+    {{ content_for_layout }}
+  </body>
+</html>

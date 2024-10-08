@@ -1,0 +1,12 @@
+.page-title {
+  max-width: 600px;
+}
+.page-content-display .page-description {
+  max-width: 800px;
+}
+.page-content-display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,75 @@
+{{ 'component-key-benefits.css' | asset_url | stylesheet_tag }}
+<section
+  style="background-color: {{ section.settings.bg_color }}"
+  class="key-benefits"
+  role="region"
+  aria-labelledby="key-benefits-title"
+>
+  <div class="key-benefits-inner_wrapper page-width">
+    {% if section.settings.title != blank %}
+      <h2 id="key-benefits-title">{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <article class="benefits-list">
+        {% for block in section.blocks %}
+          <div class="benefit-item flex column" role="article" aria-label="Benefit: {{ block.settings.benefit_title }}">
+            <h4 class="benefit-title">{{ block.settings.benefit_title }}</h4>
+            <div class="benefit-description">
+              {{ block.settings.benefit_description | replace: '<img', '<img loading="lazy"' }}
+            </div>
+          </div>
+        {% endfor %}
+      </article>
+    {% else %}
+      <p>No benefits have been added yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Key Benefits",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Key Benefits Section"
+    },
+    {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+    },
+    {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#FDFBD8",
+          "info": "Choose a background color for the key benefits section"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "benefit_title",
+          "label": "Benefit Title"
+        },
+        {
+          "type": "richtext",
+          "id": "benefit_description",
+          "label": "Benefit Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Key Benefits",
+      "category": "text"
+    }
+  ]
+}
+{% endschema %}

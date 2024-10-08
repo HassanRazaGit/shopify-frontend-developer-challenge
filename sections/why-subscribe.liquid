@@ -1,0 +1,248 @@
+{% schema %}
+{
+  "name": "Why Subscribe",
+  "tag": "section",
+  "class": "why-subscribe",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section-id",
+      "label": "Enter Section Id",
+      "default": "why-subscribe",
+      "info": "Use [-] instead of space. This ID will be used for linking to this section."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Subscribe?"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "destination-id",
+      "label": "Enter Location Id",
+      "default": "featured-product",
+      "info": "Use [-] instead of space"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "1"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Benefit Text",
+          "default": "Benefit description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Subscribe",
+      "blocks": [
+        {
+          "type": "benefit"
+        },
+        {
+          "type": "benefit"
+        },
+        {
+          "type": "benefit"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<section
+  id="{{ section.settings.section-id }}"
+  class="why-subscribe page-width"
+  data-section-id="{{ section.id }}"
+  data-section-type="why-subscribe"
+>
+  <h2 class="why-subscribe__heading">{{ section.settings.heading }}</h2>
+  {% if section.blocks.size > 0 %}
+    <div class="why-subscribe__benefits">
+      {% for block in section.blocks %}
+        {% if block.type == 'benefit' %}
+          <article class="why-subscribe__benefit" aria-labelledby="benefit-{{ block.settings.number }}">
+            <h1 id="benefit-{{ block.settings.number }}">{{ block.settings.number }}</h1>
+            <p>{{ block.settings.text }}</p>
+          </article>
+          {% if forloop.index > 1 and forloop.last %}
+            <div class="line"></div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No subscription benefits have been added yet.</p>
+  {% endif %}
+  <div class="button-wrapper flex">
+    <button id="subscribeWhySubscribe" class="why-subscribe-button button" aria-label="Subscribe now">
+      {{- section.settings.text -}}
+    </button>
+  </div>
+</section>
+<script>
+    document.getElementById('subscribeWhySubscribe').addEventListener('click', function() {
+    const destination = document.getElementById('{{ section.settings.destination-id }}');
+    if (destination) {
+      destination.scrollIntoView({behavior: 'smooth'});
+      console.log("subscribeWhySubscribe button Clicked")
+    }
+  });
+</script>
+{% stylesheet %}
+  .line {
+    border-bottom: 2px solid black;
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    z-index: -1;
+  }
+  .why-subscribe__benefit p {
+    font-style: italic;
+    font-size: 2rem;
+  }
+  .why-subscribe {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .why-subscribe__heading {
+    margin-bottom: 60px;
+  }
+
+  .why-subscribe__benefits {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+    gap: 75px
+  }
+
+  .why-subscribe__benefit {
+    flex: 1;
+    border: 2px solid #000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    background-color: white;
+  }
+
+  .why-subscribe__benefit h1{
+    padding: 10px;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    background: white;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .why-subscribe__button {
+    display: inline-block;
+    background-color: #ffff00;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: #000;
+  }
+
+  .why-subscribe__button:hover {
+    background-color: #e6e600;
+  }
+
+  @media screen and (max-width: 1070px){
+    .why-subscribe__benefit {
+        min-width: 170px;
+        max-width: 170px;
+        min-height: 170px;
+    }
+    .why-subscribe__benefits {
+        gap: 50px;
+    }
+  }
+    @media screen and (max-width: 880px){
+    .why-subscribe__benefit p {
+        font-size: 1.5rem;
+    }
+    .why-subscribe__benefit {
+        min-width: 130px;
+        max-width: 130px;
+        min-height: 130px;
+    }
+    .why-subscribe__benefits {
+        gap: 50px;
+    }
+  }
+    @media screen and (max-width: 690px) {
+      .line {
+        border-bottom: none;
+        border-left: 2px solid black;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        height: 100%;
+        width: 0;
+    }
+      .why-subscribe__benefits {
+        gap: 75px;
+    }
+      .why-subscribe__benefit h1{
+        line-height: 30px;
+      }
+      .why-subscribe__benefit p {
+        font-size: 1.7rem;
+    }
+      .why-subscribe__benefits {
+        flex-direction: column;
+        align-items: center;
+    }
+      .why-subscribe__benefit {
+        min-width: 170px;
+        max-width: 170px;
+        min-height: 170px;
+    }
+  }
+  @media screen and (max-width: 420px) {
+      .why-subscribe__benefit {
+        min-width: 150px;
+        max-width: 150px;
+        min-height: 150px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  // Add any necessary JavaScript here
+{% endjavascript %}

@@ -1,0 +1,64 @@
+{{ 'component-page-content-display.css' | asset_url | stylesheet_tag }}
+{% assign selected_page = section.settings.selected_page %}
+
+<div class="page-content-display text-center page-width" role="region" aria-labelledby="page-content-title">
+  {% if selected_page %}
+    {% assign page_content = pages[selected_page] %}
+
+    <h2 id="page-content-title" class="page-title">{{ page_content.title }}</h2>
+    <div class="page-description">
+      {% if page_content.content != blank %}
+        {{ page_content.content | replace: '<img', '<img loading="lazy"' }}
+      {% else %}
+        <p>No content available for this page.</p>
+      {% endif %}
+    </div>
+    <div class="button-wrapper flex">
+      <button id="subscribeButtonPageContentDisplay" class="page-content__button button" aria-label="Subscribe now">
+        {{- section.settings.text -}}
+      </button>
+    </div>
+  {% else %}
+    <p>Please select a page from the section settings.</p>
+  {% endif %}
+</div>
+<script>
+    document.getElementById('subscribeButtonPageContentDisplay').addEventListener('click', function() {
+    const destination = document.getElementById('{{ section.settings.destination-id }}');
+    if (destination) {
+      destination.scrollIntoView({behavior: 'smooth'});
+      console.log("subscribeButtonPageContentDisplay button Clicked")
+    }
+  });
+</script>
+{% schema %}
+{
+  "name": "Page Content Display",
+  "settings": [
+    {
+      "type": "page",
+      "id": "selected_page",
+      "label": "Select a page",
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "destination-id",
+      "label": "Enter Location Id",
+      "default": "why-subscribe",
+      "info": "Use [-] instead of space"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page Content Display",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

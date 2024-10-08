@@ -1,0 +1,145 @@
+{{ 'component-featured-product.css' | asset_url | stylesheet_tag }}
+
+{% assign product = all_products[section.settings.featured_product] %}
+{% assign first_available_variant = product.variants | where: 'available', true | first %}
+
+<section
+  id="{{ section.settings.section-id }}"
+  class="featured-product page-width"
+  aria-labelledby="featured-product-title"
+>
+  <div class="featured-product__wrapper">
+    <div class="featured-product__image-wrapper">
+      <div class="featured-product__slider">
+        <div class="featured-product__main-image">
+          <img
+            src="{{ product.featured_image | img_url: 'large' }}"
+            alt="{{ product.featured_image.alt | escape }}"
+            loading="lazy"
+          >
+        </div>
+        <div class="featured-product__thumbnails-container">
+          <div class="featured-product__thumbnails">
+            {% for image in product.images %}
+              <div class="thumbnail{% if forloop.first %} active{% endif %}">
+                <img
+                  src="{{ image | img_url: '300x' }}"
+                  alt="{{ image.alt | escape }}"
+                  loading="lazy"
+                  data-full-image-url="{{ image | img_url: 'large' }}"
+                >
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <button class="slider-nav prev" aria-label="Previous image">{% render 'icon-left' %}</button>
+        <button class="slider-nav next" aria-label="Next image">{% render 'icon-left' %}</button>
+      </div>
+    </div>
+
+    <div class="featured-product__details">
+      <h4 id="featured-product-title" class="featured-product__title">{{ product.title }}</h4>
+      {% if product.available %}
+        <form class="featured-product__form" action="/cart/add" method="post" id="add-to-cart-form">
+          {% unless product.has_only_default_variant %}
+            <div class="featured-product__variants">
+              {% for variant in product.variants %}
+                <label class="variant-radio">
+                  <input
+                    type="radio"
+                    name="id"
+                    class="variant_custom-input"
+                    value="{{ variant.id }}"
+                    {% if variant.id == first_available_variant.id %}
+                      checked
+                    {% endif %}
+                    {% unless variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                  <span class="variant-radio__label">
+                    {{ variant.title }}
+
+                    {% if variant.metafields.custom.variant_subscription_info %}
+                      <i>
+                        {{ variant.metafields.custom.variant_subscription_info }}
+                      </i>
+                    {% endif %}
+                  </span>
+                  <span class="variant-radio__label">
+                    {{ variant.price | money_with_currency }}
+                    {% unless variant.available %} (Sold Out){% endunless %}
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+          {% else %}
+            <input type="hidden" name="id" value="{{ first_available_variant.id }}">
+          {% endunless %}
+
+          <button
+            type="submit"
+            name="add"
+            id="add-to-cart-button"
+            class="featured-product__add-to-cart button"
+            {% unless first_available_variant %}
+              disabled
+            {% endunless %}
+          >
+            {% if first_available_variant %}
+              Add to Cart - {{ first_available_variant.price | money_with_currency }}
+            {% else %}
+              Sold Out
+            {% endif %}
+          </button>
+        </form>
+      {% else %}
+        <p class="featured-product__sold-out">Sorry, this product is currently out of stock.</p>
+      {% endif %}
+
+      <div class="featured-product__description">
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="cart-popup" class="cart-popup" style="display: none;">
+  <div class="cart-popup__content">
+    <h3>Your Cart</h3>
+    <div id="cart-items" aria-live="polite"></div>
+    <p id="cart-total"></p>
+    <div class="cart-popup__buttons">
+      <button id="continue-shopping" class="button">Continue Shopping</button>
+      <a href="/checkout" class="button">Proceed to Checkout</a>
+    </div>
+  </div>
+</div>
+
+<div id="loader" class="loader" style="display: none;">
+  <div class="loader__spinner"></div>
+</div>
+{% schema %}
+{
+  "name": "Featured Product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section-id",
+      "label": "Enter Section Id",
+      "default": "featured-product",
+      "info": "Use [-] instead of space"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product"
+    }
+  ]
+}
+{% endschema %}

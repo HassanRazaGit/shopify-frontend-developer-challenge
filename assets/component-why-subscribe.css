@@ -1,0 +1,50 @@
+.why-subscribe__benefit {
+  min-width: 321px;
+  height: 300px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 321px 300px;
+}
+.why-subscribe__benefit fieldset {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 2px solid black;
+}
+legend {
+  padding: 15px;
+}
+.why-subscribe__benefits hr {
+  border-bottom: 2px solid black;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-top: 100px;
+}
+.why-subscribe__benefit {
+  min-width: 321px;
+  height: 300px;
+  background: white;
+}
+.why-subscribe__benefit fieldset {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 2px solid black;
+}
+legend {
+  padding: 15px;
+}
+.why-subscribe__benefits hr {
+  border-bottom: 2px solid black;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-top: 100px;
+}
+.why-subscribe__benefits hr:last-of-type {
+  display: none;
+}
