@@ -59,7 +59,7 @@ To get started, clone the project repository using the following command:
 
 git clone https://github.com/HassanRazaGit/shopify-frontend-developer-challenge.git
 
-cd shopify-frontend-developer-challenge
+Or Download .ZIP File.
 
 
 **2. Upload to Shopify**
